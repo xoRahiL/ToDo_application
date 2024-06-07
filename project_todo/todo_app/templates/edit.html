@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="w-75 m-auto">
+    <a class="btn btn-danger mt-3 mb-5" href="/">Back</a> <h1>Edit</h1>
+<!--    To do update form -->
+    <form action="/update/{{td.id}}/" enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" name="title" id="title" class="form-control" placeholder="" value="{{td.title}}"/>
+        </div>
+        <div class="mb-3">
+            <div class="mb-3">
+                <label for="desc" class="form-label">Description</label>
+                <textarea class="form-control" name="desc" id="desc" rows="3">{{td.description}}</textarea>
+            </div>
+        </div>
+
+        <input class="btn btn-success btn-lg" type="submit" value="Update">
+        <input class="btn btn-danger btn-lg" type="reset" value="Reset">
+    </form>
+<!--    To do update form ends here-->
+</div>
+{% endblock %}

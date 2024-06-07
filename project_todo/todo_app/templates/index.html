@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<!--Developer by Rahil-->
+<head>
+    <title>ToDo</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="//cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+
+</head>
+
+<body class="bg-dark text-light">
+<header>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+        <a class="navbar-brand" href="#"><h3>To do</h3></a>
+        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false"
+                aria-label="Toggle navigation"></button>
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+            <ul class="navbar-nav me-auto mt-2 mt-lg-0 display-flex">
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false"><span
+                            class="text-capitalize">{{u.username}}</span></a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownId">
+<!--                        <a class="dropdown-item" href="">Profile</a>-->
+                        <a class="dropdown-item" href="/logout/">Log out</a>
+                    </div>
+                </li>
+                {% else %}
+                <li class="nav-link">
+                    <a class="dropdown-item" href="/login/">Login/Register</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+<!--    Navbar ends here -->
+</header>
+<main>
+    {% block content %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-success alert-dismissible fade show mt-2 mx-3" role="alert">
+        <strong>Note: </strong> {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    <div class="w-75 m-auto">
+<!--        Add notes form -->
+        <form action="/create/" enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            <div class="mb-3 mt-3">
+                <label for="title" class="form-label">Enter Title</label>
+                <input type="text" name="title" id="title" class="form-control" placeholder=""/>
+            </div>
+            <div class="mb-3">
+                <div class="mb-3">
+                    <label for="desc" class="form-label">Write Description</label>
+                    <textarea class="form-control" name="desc" id="desc" rows="3"></textarea>
+                </div>
+            </div>
+
+            <input class="btn btn-success btn-lg" type="submit" value="Add">
+            <input class="btn btn-danger btn-lg text-right" type="reset" value="Reset">
+        </form>
+<!--        Add notes form ends here-->
+    </div>
+    <div>
+        <div class="table-responsive w-75 m-auto mt-5">
+            <h2>Your To Do's</h2>
+<!--            To do list table -->
+            <table class="table table-dark table-striped table-striped-columns rounded" id="myTable">
+                <thead class="table-light">
+                <tr>
+                    <th>Sr.</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                {% if td is not None %}
+                {% for td in td %}
+                <tr class="table-primary">
+                    <td scope="row">{{forloop.counter}}</td>
+                    <td scope="row" >{{td.title}}</td>
+                    <td scope="row" >{{td.description}}</td>
+                    <td scope="row">
+                        <a href="/update/{{td.id}}/"><i class="bi bi-pencil-square"></i></a>
+                        <a href="/delete/{{td.id}}/"><i class="bi bi-trash-fill"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+                </tbody>
+                <tfoot>
+
+                </tfoot>
+            </table>
+<!--            To do list table ends here -->
+        </div>
+    </div>
+    {% endblock %}
+</main>
+<footer>
+    <!-- place footer here -->
+</footer>
+<!-- Bootstrap JavaScript Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+
+<script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+
+<script>
+    let table = new DataTable('#myTable');
+</script>
+</body>
+
+</html>
